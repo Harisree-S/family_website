@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Hero from './components/Hero';
 import MemberCard from './components/MemberCard';
 import EventsSection from './components/EventsSection';
 import Gallery from './components/Gallery';
-import MemberDetails from './components/MemberDetails';
-import MemoryDetails from './components/MemoryDetails';
+// Lazy load route components
+const MemberDetails = lazy(() => import('./components/MemberDetails'));
+const MemoryDetails = lazy(() => import('./components/MemoryDetails'));
+
 import { familyMembers } from './data/familyData';
 import { AnimatePresence } from 'framer-motion';
 
@@ -56,11 +58,25 @@ function App() {
       <ScrollToTop />
       <NavigationDock />
       <AnimatePresence mode="wait">
-        <Routes location={location} key={location.pathname}>
-          <Route path="/" element={<Home />} />
-          <Route path="/member/:id" element={<MemberDetails />} />
-          <Route path="/memory/:id" element={<MemoryDetails />} />
-        </Routes>
+        <Suspense fallback={
+          <div style={{
+            height: '100vh',
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#d4af37',
+            backgroundColor: '#030305'
+          }}>
+            Loading...
+          </div>
+        }>
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<Home />} />
+            <Route path="/member/:id" element={<MemberDetails />} />
+            <Route path="/memory/:id" element={<MemoryDetails />} />
+          </Routes>
+        </Suspense>
       </AnimatePresence>
     </AudioProvider>
   );

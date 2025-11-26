@@ -9,8 +9,8 @@ const NavigationDock = () => {
 
     return (
         <motion.div
-            initial={{ y: 100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
+            initial={{ y: 100, opacity: 0, x: "-50%" }}
+            animate={{ y: 0, opacity: 1, x: "-50%" }}
             transition={{ delay: 1, type: "spring", stiffness: 260, damping: 20 }}
             style={styles.dockContainer}
         >
@@ -39,7 +39,7 @@ const styles = {
         position: 'fixed',
         bottom: 'max(2rem, env(safe-area-inset-bottom) + 1rem)',
         left: '50%',
-        transform: 'translateX(-50%)',
+        // transform: 'translateX(-50%)', // Handled by framer-motion
         zIndex: 1000,
         display: 'flex',
         justifyContent: 'center',

@@ -150,9 +150,9 @@ const Hero = () => {
                     <div style={styles.subtitleWrapper}>
                         <div style={styles.line} />
                         <h2 style={styles.subtitle}>
-                            {"Celebrating Love, Family, and Togetherness".split("").map((char, index) => (
+                            {"Celebrating Love, Family, and Togetherness".split(" ").map((word, index) => (
                                 <motion.span key={index} variants={letterVariants} style={{ display: 'inline-block' }}>
-                                    {char === " " ? "\u00A0" : char}
+                                    {word}
                                 </motion.span>
                             ))}
                         </h2>
@@ -240,7 +240,7 @@ function getStyles(isMobile) {
             width: '100%',
             height: '100%',
             maxWidth: isMobile ? '100%' : '1100px',
-            maxHeight: isMobile ? '50vh' : '65vh',
+            maxHeight: isMobile ? '45vh' : '65vh', // Reduced height on mobile
             borderRadius: '20px',
             boxShadow: '0 30px 60px rgba(0,0,0,0.5), 0 0 40px rgba(212, 175, 55, 0.1)',
             transformStyle: 'preserve-3d',
@@ -274,33 +274,35 @@ function getStyles(isMobile) {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            marginTop: isMobile ? '1rem' : '3rem',
-            marginBottom: isMobile ? '4rem' : '2rem',
+            marginTop: isMobile ? '2rem' : '3rem',
+            marginBottom: isMobile ? '2rem' : '2rem',
             zIndex: 20,
+            padding: isMobile ? '0 1rem' : '0', // Add padding on mobile
         },
         subtitleWrapper: {
             display: 'flex',
             alignItems: 'center',
             gap: '1.5rem',
             flexDirection: isMobile ? 'column' : 'row',
-            width: '100%', // Ensure wrapper takes full width
+            width: '100%',
             justifyContent: 'center',
         },
         subtitle: {
             fontFamily: "'Cormorant Garamond', serif",
-            fontSize: isMobile ? 'clamp(1rem, 5vw, 1.5rem)' : '1.8rem', // Responsive font size
-            letterSpacing: isMobile ? '0.1em' : '0.2em', // Reduced spacing on mobile
+            fontSize: isMobile ? '1.5rem' : '1.8rem',
+            letterSpacing: isMobile ? '0.05em' : '0.2em',
             color: '#d4af37',
             textTransform: 'uppercase',
-            margin: '0 10px', // Add side margin
+            margin: '0 10px',
             textAlign: 'center',
             fontWeight: 400,
             textShadow: '0 0 20px rgba(212, 175, 55, 0.3)',
-            maxWidth: '90vw', // Prevent overflow
-            lineHeight: 1.4, // Better line height for wrapped text
-            display: 'flex', // Flex to handle wrapping of spans better? No, block is better for text.
-            flexWrap: 'wrap', // Allow wrapping
+            maxWidth: '100%',
+            lineHeight: 1.4,
+            display: 'flex',
+            flexWrap: 'wrap', // Ensure wrapping
             justifyContent: 'center',
+            gap: isMobile ? '0.5rem' : '0.8rem', // Gap between words
         },
         line: {
             height: '1px',
