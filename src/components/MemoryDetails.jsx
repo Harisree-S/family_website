@@ -402,8 +402,25 @@ const MemoryDetails = () => {
                         </motion.div>
                     </motion.div>
                 </div>
-            </div >
-        </PageTransition >
+            </div>
+            {/* Temporary Debug Overlay */}
+            <div style={{
+                position: 'fixed',
+                bottom: 10,
+                right: 10,
+                background: 'rgba(0,0,0,0.8)',
+                color: '#0f0',
+                padding: '10px',
+                borderRadius: '5px',
+                fontSize: '12px',
+                zIndex: 9999,
+                pointerEvents: 'none'
+            }}>
+                <p>Memory ID: {memory?.id}</p>
+                <p>Photos: {uploadedPhotos.length}</p>
+                <p>Videos: {uploadedVideos.length}</p>
+            </div>
+        </PageTransition>
     );
 };
 
