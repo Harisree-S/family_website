@@ -136,8 +136,22 @@ const MemberDetails = () => {
                     if (type === 'cover') {
                         // ... (cover logic removed as per previous request, but keeping safety check)
                     } else {
-                        // Optimistic UI Update: Add to state immediately
-                        const newMedia = await saveMedia(member.id, 'member', result.type, result.url, result.storagePath);
+                        // Set default values to match existing tiles
+                        const defaultCaption = result.type === 'video' ? 'New Video' : 'New Photo';
+                        const defaultPosition = '50% 20%'; // Match static media default
+                        const defaultScale = 1;
+
+                        // Optimistic UI Update: Add to state immediately with proper defaults
+                        const newMedia = await saveMedia(
+                            member.id,
+                            'member',
+                            result.type,
+                            result.url,
+                            result.storagePath,
+                            defaultCaption,
+                            defaultScale,
+                            defaultPosition
+                        );
 
                         if (result.type === 'video') {
                             setUploadedVideos(prev => [newMedia, ...prev]);
@@ -151,8 +165,7 @@ const MemberDetails = () => {
                         setEditingItem(newMedia);
                         setIsCaptionModalOpen(true);
 
-                        // We still fetch to ensure consistency
-                        // fetchMedia(); // Removed manual fetch, using subscription
+                        // Subscription will handle updates
                     }
                 } catch (error) {
                     console.error('Save failed:', error);

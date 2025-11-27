@@ -138,8 +138,22 @@ const MemoryDetails = () => {
                     if (type === 'cover') {
                         // ... (cover logic removed)
                     } else {
-                        // Optimistic UI Update
-                        const newMedia = await saveMedia(memory.id, 'memory', result.type, result.url, result.storagePath);
+                        // Set default values to match existing tiles
+                        const defaultCaption = result.type === 'video' ? 'New Video' : 'New Photo';
+                        const defaultPosition = '50% 20%'; // Match static media default
+                        const defaultScale = 1;
+
+                        // Optimistic UI Update: Add to state immediately with proper defaults
+                        const newMedia = await saveMedia(
+                            memory.id,
+                            'memory',
+                            result.type,
+                            result.url,
+                            result.storagePath,
+                            defaultCaption,
+                            defaultScale,
+                            defaultPosition
+                        );
 
                         if (result.type === 'video') {
                             setUploadedVideos(prev => [newMedia, ...prev]);
@@ -153,7 +167,7 @@ const MemoryDetails = () => {
                         setEditingItem(newMedia);
                         setIsCaptionModalOpen(true);
 
-                        // fetchMedia(); // Removed manual fetch, using subscription
+                        // Subscription will handle updates
                     }
                 } catch (error) {
                     console.error(error);

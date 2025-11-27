@@ -62,46 +62,41 @@ const MediaItem = ({ item, type, onClick, onEdit, onDelete }) => {
             style={styles.container}
         >
             <div style={styles.mediaWrapper}>
-                {/* DEBUG OVERLAY */}
-                <div style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    background: 'rgba(0,0,0,0.8)',
-                    color: '#0f0',
-                    fontSize: '10px',
-                    padding: '5px',
-                    zIndex: 100,
-                    wordBreak: 'break-all',
-                    pointerEvents: 'none'
-                }}>
-                    DEBUG URL: {item.url || 'NO URL'}
-                </div>
-
                 {type === 'video' ? (
-                    <>
-                        <video
-                            src={item.url}
-                            style={styles.media}
-                            muted
-                            playsInline
-                            controls={true} // Enable controls for debugging
-                        />
-                    </>
+                    <video
+                        src={item.url}
+                        style={styles.media}
+                        muted
+                        playsInline
+                        poster={getVideoPoster(item.url)}
+                    />
                 ) : (
                     <img
-                        src={item.url}
+                        src={getOptimizedUrl(item.url)}
                         alt={item.caption}
                         style={{
                             ...styles.media,
                             objectPosition: item.position || '50% 20%',
                             transform: item.scale ? `scale(${item.scale})` : 'scale(1)',
-                            border: '2px solid red', // Debug border
-                            minHeight: '100px', // Force height
-                            backgroundColor: 'blue' // Debug background
                         }}
+                        onLoad={handleLoad}
+                        onError={handleError}
                     />
+                )}
+
+                {/* Loading State */}
+                {isLoading && (
+                    <div style={styles.loader}>
+                        <div className="spinner"></div>
+                    </div>
+                )}
+
+                {/* Error State */}
+                {hasError && (
+                    <div style={styles.errorState}>
+                        <span style={{ color: '#ff6b6b', fontSize: '2rem' }}>⚠️</span>
+                        <span style={{ color: '#999', fontSize: '0.9rem' }}>Failed to load</span>
+                    </div>
                 )}
 
                 {/* Gradient Overlay */}
