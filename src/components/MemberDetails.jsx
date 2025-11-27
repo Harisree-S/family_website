@@ -361,7 +361,13 @@ const MemberDetails = () => {
                             style={styles.grid}
                         >
                             {allPhotos.length > 0 ? allPhotos.map((item, index) => (
-                                <motion.div key={index} variants={itemVariants}>
+                                <motion.div
+                                    key={item.id || item.url || index}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.5 }}
+                                >
                                     <MediaItem
                                         item={item}
                                         type="image"
@@ -395,7 +401,13 @@ const MemberDetails = () => {
                             style={styles.grid}
                         >
                             {allVideos.length > 0 ? allVideos.map((item, index) => (
-                                <motion.div key={index} variants={itemVariants}>
+                                <motion.div
+                                    key={item.id || item.url || index}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.5 }}
+                                >
                                     <MediaItem
                                         item={item}
                                         type="video"
