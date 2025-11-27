@@ -95,9 +95,14 @@ const MemberCard = ({ member }) => {
                             }}
                             animate={{
                                 scale: isHovered ? 1.1 : 1,
-                                filter: isHovered ? 'contrast(1.1) saturate(1.1)' : 'contrast(1) saturate(1)'
+                                filter: isHovered ? 'contrast(1.2) saturate(1.2) brightness(1.1)' : 'contrast(1) saturate(1)'
                             }}
                             transition={{ duration: 0.6 }}
+                        />
+                        <motion.div
+                            style={styles.glowOverlay}
+                            animate={{ opacity: isHovered ? 1 : 0 }}
+                            transition={{ duration: 0.3 }}
                         />
                         <div style={styles.overlay} />
                         <div style={styles.reflection} />
@@ -176,6 +181,13 @@ const styles = {
         height: '40%',
         background: 'linear-gradient(to bottom, rgba(255,255,255,0.05) 0%, transparent 100%)',
         pointerEvents: 'none',
+    },
+    glowOverlay: {
+        position: 'absolute',
+        inset: 0,
+        background: 'radial-gradient(circle at center, rgba(212, 175, 55, 0.2) 0%, transparent 70%)',
+        pointerEvents: 'none',
+        zIndex: 2,
     },
     info: {
         position: 'absolute',

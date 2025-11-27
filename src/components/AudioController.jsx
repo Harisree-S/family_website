@@ -13,7 +13,9 @@ export const AudioProvider = ({ children }) => {
     // Initialize audio settings
     useEffect(() => {
         bgAudioRef.current.loop = true;
+        bgAudioRef.current.preload = "auto"; // Preload for lower latency
         sfxAudioRef.current.volume = 0.6; // Standard SFX volume
+        sfxAudioRef.current.preload = "auto";
     }, []);
 
     // Handle video playing state - pause BG music when video plays

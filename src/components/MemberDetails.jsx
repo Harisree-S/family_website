@@ -132,12 +132,22 @@ const MemberDetails = () => {
                     });
                     showToast('Profile photo updated!', 'success');
                 } else {
-                    // For regular media, we might want to ask for a caption first, 
-                    // but for now let's just save it and let them edit caption later.
-                    // Or we could open a modal *after* upload to set caption/scale.
-                    // To keep it simple and robust: save immediately.
-                    await saveMedia(member.id, 'member', result.type, result.url, result.storagePath);
+                    // Optimistic UI Update: Add to state immediately
+                    const newMedia = await saveMedia(member.id, 'member', result.type, result.url, result.storagePath);
+
+                    if (result.type === 'video') {
+                        setUploadedVideos(prev => [...prev, newMedia]);
+                    } else {
+                        setUploadedPhotos(prev => [...prev, newMedia]);
+                    }
+
                     showToast('Uploaded successfully!', 'success');
+
+                    // Open Caption Modal immediately
+                    setEditingItem(newMedia);
+                    setIsCaptionModalOpen(true);
+
+                    // We still fetch to ensure consistency
                     fetchMedia();
                 }
             } catch (error) {

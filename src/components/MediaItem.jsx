@@ -59,6 +59,13 @@ const MediaItem = ({ item, type, onClick, onEdit, onDelete }) => {
 
                 {/* Gradient Overlay */}
                 <div style={styles.overlay} />
+
+                {/* Hover Glow */}
+                <motion.div
+                    style={styles.glowOverlay}
+                    animate={{ opacity: isHovered ? 1 : 0 }}
+                    transition={{ duration: 0.3 }}
+                />
             </div>
 
             <div style={styles.footer}>
@@ -150,6 +157,13 @@ const styles = {
         height: '50%',
         background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%)',
         pointerEvents: 'none',
+    },
+    glowOverlay: {
+        position: 'absolute',
+        inset: 0,
+        background: 'radial-gradient(circle at center, rgba(255, 255, 255, 0.15) 0%, transparent 70%)',
+        pointerEvents: 'none',
+        zIndex: 1,
     },
     footer: {
         position: 'absolute',

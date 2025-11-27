@@ -132,8 +132,21 @@ const MemoryDetails = () => {
                     });
                     showToast('Cover updated successfully!', 'success');
                 } else {
-                    await saveMedia(memory.id, 'memory', result.type, result.url, result.storagePath);
+                    // Optimistic UI Update
+                    const newMedia = await saveMedia(memory.id, 'memory', result.type, result.url, result.storagePath);
+
+                    if (result.type === 'video') {
+                        setUploadedVideos(prev => [...prev, newMedia]);
+                    } else {
+                        setUploadedPhotos(prev => [...prev, newMedia]);
+                    }
+
                     showToast('Uploaded successfully!', 'success');
+
+                    // Open Caption Modal immediately
+                    setEditingItem(newMedia);
+                    setIsCaptionModalOpen(true);
+
                     fetchMedia();
                 }
             } catch (error) {
