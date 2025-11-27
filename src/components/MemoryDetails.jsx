@@ -49,24 +49,6 @@ const MemoryDetails = () => {
     const { id } = useParams();
     const [selectedMedia, setSelectedMedia] = useState(null);
     const [uploadedPhotos, setUploadedPhotos] = useState([]);
-    const [uploadedVideos, setUploadedVideos] = useState([]);
-    const [hiddenMedia, setHiddenMedia] = useState([]);
-    const [captionOverrides, setCaptionOverrides] = useState({});
-    const [coverImage, setCoverImage] = useState(null);
-    const [coverStyle, setCoverStyle] = useState({});
-
-    // Modal State
-    const [isCaptionModalOpen, setIsCaptionModalOpen] = useState(false);
-    const [editingItem, setEditingItem] = useState(null);
-    const [confirmModal, setConfirmModal] = useState({
-        isOpen: false,
-        title: '',
-        message: '',
-        onConfirm: () => { },
-        isDangerous: false
-    });
-
-    const memory = memories.find(m => m.id === parseInt(id));
     const { playImageAudio, playSfx, clearImageAudio, setIsVideoPlaying } = useAudio();
 
     const [isUploading, setIsUploading] = useState(false);
@@ -110,6 +92,8 @@ const MemoryDetails = () => {
         fetchMedia();
     }, [memory]);
 
+    const [uploadingType, setUploadingType] = useState(null); // 'photo' | 'video' | null
+
     useEffect(() => {
         if (memory && memory.entryAudio) {
             playImageAudio(memory.entryAudio, memory.audioVolume || 0.5, true);
@@ -120,17 +104,13 @@ const MemoryDetails = () => {
     }, [memory, playImageAudio, clearImageAudio]);
 
     const handleUploadClick = (type) => {
+        // Set loading state based on type
+        setUploadingType(type);
+
         openCloudinaryWidget(async (result) => {
-            setIsUploading(true);
             try {
                 if (type === 'cover') {
-                    const newCover = await saveCoverOverride(memory.id, 'memory', result.url, result.storagePath);
-                    setCoverImage(newCover.url);
-                    setCoverStyle({
-                        objectPosition: newCover.position,
-                        transform: `scale(${newCover.scale})`
-                    });
-                    showToast('Cover updated successfully!', 'success');
+                    // ... (cover logic removed)
                 } else {
                     // Optimistic UI Update
                     const newMedia = await saveMedia(memory.id, 'memory', result.type, result.url, result.storagePath);
@@ -153,7 +133,7 @@ const MemoryDetails = () => {
                 console.error(error);
                 showToast(`Upload failed: ${error.message}`, 'error');
             } finally {
-                setIsUploading(false);
+                setUploadingType(null);
             }
         });
     };
@@ -303,16 +283,26 @@ const MemoryDetails = () => {
                                 <button
                                     onClick={() => handleUploadClick('image')}
                                     style={styles.actionBtn}
-                                    disabled={isUploading}
+                                    disabled={uploadingType !== null}
                                 >
-                                    <ImageIcon size={18} /> {isUploading ? 'Uploading...' : 'Add Photo'}
+                                    {uploadingType === 'image' ? (
+                                        <span className="loader" style={{ width: 16, height: 16, border: '2px solid #d4af37', borderBottomColor: 'transparent', borderRadius: '50%', display: 'inline-block', animation: 'rotation 1s linear infinite' }}></span>
+                                    ) : (
+                                        <ImageIcon size={18} />
+                                    )}
+                                    <span style={{ marginLeft: '0.5rem' }}>ADD PHOTO</span>
                                 </button>
                                 <button
                                     onClick={() => handleUploadClick('video')}
                                     style={styles.actionBtn}
-                                    disabled={isUploading}
+                                    disabled={uploadingType !== null}
                                 >
-                                    <Play size={18} /> {isUploading ? 'Uploading...' : 'Add Video'}
+                                    {uploadingType === 'video' ? (
+                                        <span className="loader" style={{ width: 16, height: 16, border: '2px solid #d4af37', borderBottomColor: 'transparent', borderRadius: '50%', display: 'inline-block', animation: 'rotation 1s linear infinite' }}></span>
+                                    ) : (
+                                        <Play size={18} />
+                                    )}
+                                    <span style={{ marginLeft: '0.5rem' }}>ADD VIDEO</span>
                                 </button>
                             </div>
                         </motion.div>
@@ -386,8 +376,8 @@ const MemoryDetails = () => {
                         </motion.div>
                     </motion.div>
                 </div>
-            </div>
-        </PageTransition>
+            </div >
+        </PageTransition >
     );
 };
 
