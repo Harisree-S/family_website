@@ -10,7 +10,8 @@ import {
     updateDoc,
     setDoc,
     getDoc,
-    orderBy
+    orderBy,
+    onSnapshot
 } from 'firebase/firestore';
 
 const UPLOADS_COLLECTION = 'uploads';
