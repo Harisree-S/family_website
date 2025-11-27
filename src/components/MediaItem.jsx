@@ -59,17 +59,20 @@ const MediaItem = ({ item, type, onClick, onEdit, onDelete }) => {
                     onClick && onClick(item);
                 }
             }}
-            style={styles.container}
+            style={{
+                ...styles.container,
+                border: '1px solid rgba(255, 255, 255, 0.1)' // Ensure boundary is visible
+            }}
         >
             <div style={styles.mediaWrapper}>
-                {/* Loading Spinner */}
+                {/* Loading Spinner - Overlay */}
                 {isLoading && !hasError && (
                     <div style={styles.loader}>
                         <div className="spinner"></div>
                     </div>
                 )}
 
-                {/* Error Fallback */}
+                {/* Error Fallback - Overlay */}
                 {hasError && (
                     <div style={styles.errorState}>
                         <span style={{ fontSize: '2rem' }}>⚠️</span>
@@ -84,7 +87,7 @@ const MediaItem = ({ item, type, onClick, onEdit, onDelete }) => {
                             poster={getVideoPoster(item.url)}
                             style={{
                                 ...styles.media,
-                                opacity: (isLoading || hasError) ? 0 : 1
+                                opacity: 1 // FORCE VISIBLE
                             }}
                             muted
                             playsInline
@@ -92,11 +95,9 @@ const MediaItem = ({ item, type, onClick, onEdit, onDelete }) => {
                             onLoadedData={handleLoad}
                             onError={handleError}
                         />
-                        {!isLoading && !hasError && (
-                            <div style={styles.playOverlay}>
-                                <Play size={40} fill="rgba(255,255,255,0.8)" color="transparent" />
-                            </div>
-                        )}
+                        <div style={styles.playOverlay}>
+                            <Play size={40} fill="rgba(255,255,255,0.8)" color="transparent" />
+                        </div>
                     </>
                 ) : (
                     <img
@@ -108,7 +109,7 @@ const MediaItem = ({ item, type, onClick, onEdit, onDelete }) => {
                             objectPosition: item.position || '50% 20%',
                             transform: item.scale ? `scale(${item.scale})` : 'scale(1)',
                             filter: 'contrast(1.05) saturate(1.1)',
-                            opacity: (isLoading && !hasError) ? 0 : 1
+                            opacity: 1 // FORCE VISIBLE
                         }}
                         onLoad={handleLoad}
                         onError={handleError}
