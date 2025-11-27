@@ -338,6 +338,25 @@ const MemberDetails = () => {
                                     )}
                                     <span style={{ marginLeft: '0.5rem' }}>ADD VIDEO</span>
                                 </button>
+                                <button
+                                    onClick={async () => {
+                                        if (window.confirm("WARNING: This will delete ALL uploaded photos and videos for everyone. Are you sure?")) {
+                                            try {
+                                                const { deleteAllUploads } = await import('../utils/mediaStore');
+                                                await deleteAllUploads();
+                                                showToast('All uploads deleted successfully', 'success');
+                                                // Force reload to clear state
+                                                setTimeout(() => window.location.reload(), 1000);
+                                            } catch (e) {
+                                                console.error(e);
+                                                showToast('Failed to delete uploads', 'error');
+                                            }
+                                        }
+                                    }}
+                                    style={{ ...styles.actionBtn, borderColor: '#ff4444', color: '#ff4444' }}
+                                >
+                                    <span style={{ marginLeft: '0.5rem' }}>RESET ALL UPLOADS</span>
+                                </button>
                             </div>
                         </motion.div>
                     </div>
