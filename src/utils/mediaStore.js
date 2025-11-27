@@ -18,10 +18,11 @@ const CLOUDINARY_CLOUD_NAME = 'dpfxu4gkw';
 const CLOUDINARY_UPLOAD_PRESET = 'ls_family';
 
 // Helper to open Cloudinary Widget
-export const openCloudinaryWidget = (onSuccess) => {
+export const openCloudinaryWidget = (onSuccess, onClosed) => {
     if (!window.cloudinary) {
         console.error("Cloudinary script not loaded");
         alert("Upload widget failed to load. Please refresh the page or check your connection.");
+        if (onClosed) onClosed();
         return;
     }
 
@@ -65,6 +66,9 @@ export const openCloudinaryWidget = (onSuccess) => {
                 storagePath: result.info.public_id,
                 type: result.info.resource_type
             });
+        }
+        if (result && result.event === "close") {
+            if (onClosed) onClosed();
         }
     });
 

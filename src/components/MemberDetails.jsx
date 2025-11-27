@@ -123,36 +123,42 @@ const MemberDetails = () => {
         // Set loading state based on type
         setUploadingType(type);
 
-        openCloudinaryWidget(async (result) => {
-            try {
-                if (type === 'cover') {
-                    // ... (cover logic removed as per previous request, but keeping safety check)
-                } else {
-                    // Optimistic UI Update: Add to state immediately
-                    const newMedia = await saveMedia(member.id, 'member', result.type, result.url, result.storagePath);
-
-                    if (result.type === 'video') {
-                        setUploadedVideos(prev => [...prev, newMedia]);
+        openCloudinaryWidget(
+            async (result) => {
+                try {
+                    if (type === 'cover') {
+                        // ... (cover logic removed as per previous request, but keeping safety check)
                     } else {
-                        setUploadedPhotos(prev => [...prev, newMedia]);
+                        // Optimistic UI Update: Add to state immediately
+                        const newMedia = await saveMedia(member.id, 'member', result.type, result.url, result.storagePath);
+
+                        if (result.type === 'video') {
+                            setUploadedVideos(prev => [...prev, newMedia]);
+                        } else {
+                            setUploadedPhotos(prev => [...prev, newMedia]);
+                        }
+
+                        showToast('Uploaded successfully!', 'success');
+
+                        // Open Caption Modal immediately
+                        setEditingItem(newMedia);
+                        setIsCaptionModalOpen(true);
+
+                        // We still fetch to ensure consistency
+                        fetchMedia();
                     }
-
-                    showToast('Uploaded successfully!', 'success');
-
-                    // Open Caption Modal immediately
-                    setEditingItem(newMedia);
-                    setIsCaptionModalOpen(true);
-
-                    // We still fetch to ensure consistency
-                    fetchMedia();
+                } catch (error) {
+                    console.error('Save failed:', error);
+                    showToast(`Save failed: ${error.message}`, 'error');
+                } finally {
+                    setUploadingType(null);
                 }
-            } catch (error) {
-                console.error('Save failed:', error);
-                showToast(`Save failed: ${error.message}`, 'error');
-            } finally {
+            },
+            () => {
+                // On Widget Close / Cancel
                 setUploadingType(null);
             }
-        });
+        );
     };
 
     const handleMediaClick = (item, type) => {

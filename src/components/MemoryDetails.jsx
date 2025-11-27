@@ -123,35 +123,41 @@ const MemoryDetails = () => {
         // Set loading state based on type
         setUploadingType(type);
 
-        openCloudinaryWidget(async (result) => {
-            try {
-                if (type === 'cover') {
-                    // ... (cover logic removed)
-                } else {
-                    // Optimistic UI Update
-                    const newMedia = await saveMedia(memory.id, 'memory', result.type, result.url, result.storagePath);
-
-                    if (result.type === 'video') {
-                        setUploadedVideos(prev => [...prev, newMedia]);
+        openCloudinaryWidget(
+            async (result) => {
+                try {
+                    if (type === 'cover') {
+                        // ... (cover logic removed)
                     } else {
-                        setUploadedPhotos(prev => [...prev, newMedia]);
+                        // Optimistic UI Update
+                        const newMedia = await saveMedia(memory.id, 'memory', result.type, result.url, result.storagePath);
+
+                        if (result.type === 'video') {
+                            setUploadedVideos(prev => [...prev, newMedia]);
+                        } else {
+                            setUploadedPhotos(prev => [...prev, newMedia]);
+                        }
+
+                        showToast('Uploaded successfully!', 'success');
+
+                        // Open Caption Modal immediately
+                        setEditingItem(newMedia);
+                        setIsCaptionModalOpen(true);
+
+                        fetchMedia();
                     }
-
-                    showToast('Uploaded successfully!', 'success');
-
-                    // Open Caption Modal immediately
-                    setEditingItem(newMedia);
-                    setIsCaptionModalOpen(true);
-
-                    fetchMedia();
+                } catch (error) {
+                    console.error(error);
+                    showToast(`Upload failed: ${error.message}`, 'error');
+                } finally {
+                    setUploadingType(null);
                 }
-            } catch (error) {
-                console.error(error);
-                showToast(`Upload failed: ${error.message}`, 'error');
-            } finally {
+            },
+            () => {
+                // On Widget Close / Cancel
                 setUploadingType(null);
             }
-        });
+        );
     };
 
     const handleMediaClick = (item, type) => {
