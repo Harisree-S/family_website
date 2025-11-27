@@ -83,6 +83,7 @@ const MemoryDetails = () => {
             memory.id,
             'memory',
             (media) => {
+                console.log("Subscription update (Memory):", media);
                 const photos = media.filter(m => m.type === 'image');
                 const videos = media.filter(m => m.type === 'video');
                 setUploadedPhotos(photos);
@@ -540,7 +541,7 @@ const styles = {
         transition: 'all 0.3s ease',
     },
     section: {
-        marginBottom: '6rem',
+        marginBottom: '3rem',
     },
     sectionTitle: {
         fontSize: '2.5rem',
