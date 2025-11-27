@@ -49,9 +49,25 @@ const MemberDetails = () => {
     const { id } = useParams();
     const [selectedMedia, setSelectedMedia] = useState(null);
     const [uploadedPhotos, setUploadedPhotos] = useState([]);
-    const { playImageAudio, playSfx, clearImageAudio, setIsVideoPlaying } = useAudio();
+    const [uploadedVideos, setUploadedVideos] = useState([]);
+    const [hiddenMedia, setHiddenMedia] = useState([]);
+    const [captionOverrides, setCaptionOverrides] = useState({});
+    const [profileImage, setProfileImage] = useState(null);
+    const [profileStyle, setProfileStyle] = useState({});
 
-    const [isUploading, setIsUploading] = useState(false);
+    // Modal State
+    const [isCaptionModalOpen, setIsCaptionModalOpen] = useState(false);
+    const [editingItem, setEditingItem] = useState(null);
+    const [confirmModal, setConfirmModal] = useState({
+        isOpen: false,
+        title: '',
+        message: '',
+        onConfirm: () => { },
+        isDangerous: false
+    });
+
+    const member = familyMembers.find(m => m.id === parseInt(id));
+    const { playImageAudio, playSfx, clearImageAudio, setIsVideoPlaying } = useAudio();
 
     // Parallax Header
     const { scrollY } = useScroll();
