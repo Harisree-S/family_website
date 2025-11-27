@@ -283,13 +283,7 @@ const MemoryDetails = () => {
                                     }}
                                 />
                                 <div style={styles.coverOverlay} />
-                                <button
-                                    onClick={() => handleUploadClick('cover')}
-                                    style={styles.editCoverBtn}
-                                    title="Change Cover Photo"
-                                >
-                                    <ImageIcon size={16} />
-                                </button>
+
                             </div>
                         </motion.div>
 

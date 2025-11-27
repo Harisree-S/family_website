@@ -284,13 +284,7 @@ const MemberDetails = () => {
                                     }}
                                 />
                                 <div style={styles.profileGlow} />
-                                <button
-                                    onClick={() => handleUploadClick('cover')}
-                                    style={styles.editCoverBtn}
-                                    title="Change Profile Photo"
-                                >
-                                    <ImageIcon size={16} />
-                                </button>
+
                             </div>
                         </motion.div>
 

@@ -21,6 +21,7 @@ const CLOUDINARY_UPLOAD_PRESET = 'ls_family';
 export const openCloudinaryWidget = (onSuccess) => {
     if (!window.cloudinary) {
         console.error("Cloudinary script not loaded");
+        alert("Upload widget failed to load. Please refresh the page or check your connection.");
         return;
     }
 
