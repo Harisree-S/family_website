@@ -120,7 +120,7 @@ export const getMedia = async (parentId, category) => {
     }
 };
 
-export const subscribeToMedia = (parentId, category, onUpdate) => {
+export const subscribeToMedia = (parentId, category, onUpdate, onError) => {
     const q = query(
         collection(db, UPLOADS_COLLECTION),
         where("parentId", "==", parseInt(parentId)),
@@ -135,6 +135,7 @@ export const subscribeToMedia = (parentId, category, onUpdate) => {
         onUpdate(media);
     }, (error) => {
         console.error("Error subscribing to media:", error);
+        if (onError) onError(error);
     });
 };
 

@@ -79,12 +79,20 @@ const MemoryDetails = () => {
         if (!memory) return;
 
         // Subscribe to memory media
-        const unsubscribe = subscribeToMedia(memory.id, 'memory', (media) => {
-            const photos = media.filter(m => m.type === 'image');
-            const videos = media.filter(m => m.type === 'video');
-            setUploadedPhotos(photos);
-            setUploadedVideos(videos);
-        });
+        const unsubscribe = subscribeToMedia(
+            memory.id,
+            'memory',
+            (media) => {
+                const photos = media.filter(m => m.type === 'image');
+                const videos = media.filter(m => m.type === 'video');
+                setUploadedPhotos(photos);
+                setUploadedVideos(videos);
+                setDebugError(null);
+            },
+            (error) => {
+                setDebugError(error.message);
+            }
+        );
 
         setHiddenMedia(getHiddenStaticMedia());
         setCaptionOverrides(getStaticCaptionOverrides());
@@ -110,6 +118,7 @@ const MemoryDetails = () => {
 
 
     const [uploadingType, setUploadingType] = useState(null); // 'photo' | 'video' | null
+    const [debugError, setDebugError] = useState(null);
 
     useEffect(() => {
         if (memory && memory.entryAudio) {
@@ -419,6 +428,7 @@ const MemoryDetails = () => {
                 <p>Memory ID: {memory?.id}</p>
                 <p>Photos: {uploadedPhotos.length}</p>
                 <p>Videos: {uploadedVideos.length}</p>
+                {debugError && <p style={{ color: 'red' }}>Error: {debugError}</p>}
             </div>
         </PageTransition>
     );

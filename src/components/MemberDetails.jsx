@@ -75,16 +75,27 @@ const MemberDetails = () => {
     const yHeader = useTransform(scrollY, [0, 300], [0, 150]);
     const opacityHeader = useTransform(scrollY, [0, 300], [1, 0.5]);
 
+    const [uploadingType, setUploadingType] = useState(null); // 'photo' | 'video' | null
+    const [debugError, setDebugError] = useState(null);
+
     useEffect(() => {
         if (!member) return;
 
         // Subscribe to member media
-        const unsubscribe = subscribeToMedia(member.id, 'member', (media) => {
-            const photos = media.filter(m => m.type === 'image');
-            const videos = media.filter(m => m.type === 'video');
-            setUploadedPhotos(photos);
-            setUploadedVideos(videos);
-        });
+        const unsubscribe = subscribeToMedia(
+            member.id,
+            'member',
+            (media) => {
+                const photos = media.filter(m => m.type === 'image');
+                const videos = media.filter(m => m.type === 'video');
+                setUploadedPhotos(photos);
+                setUploadedVideos(videos);
+                setDebugError(null);
+            },
+            (error) => {
+                setDebugError(error.message);
+            }
+        );
 
         setHiddenMedia(getHiddenStaticMedia());
         setCaptionOverrides(getStaticCaptionOverrides());
@@ -106,10 +117,6 @@ const MemberDetails = () => {
 
         return () => unsubscribe();
     }, [member]);
-
-
-
-    const [uploadingType, setUploadingType] = useState(null); // 'photo' | 'video' | null
 
     useEffect(() => {
         if (member && member.entryAudio) {
