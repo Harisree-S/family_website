@@ -59,41 +59,17 @@ const MediaItem = ({ item, type, onClick, onEdit, onDelete }) => {
                     onClick && onClick(item);
                 }
             }}
-            style={{
-                ...styles.container,
-                border: '1px solid rgba(255, 255, 255, 0.1)' // Ensure boundary is visible
-            }}
+            style={styles.container}
         >
             <div style={styles.mediaWrapper}>
-                {/* Loading Spinner - Overlay */}
-                {isLoading && !hasError && (
-                    <div style={styles.loader}>
-                        <div className="spinner"></div>
-                    </div>
-                )}
-
-                {/* Error Fallback - Overlay */}
-                {hasError && (
-                    <div style={styles.errorState}>
-                        <span style={{ fontSize: '2rem' }}>⚠️</span>
-                        <span style={{ fontSize: '0.8rem', color: '#666' }}>Failed to load</span>
-                    </div>
-                )}
-
                 {type === 'video' ? (
                     <>
                         <video
                             src={item.url}
-                            poster={getVideoPoster(item.url)}
-                            style={{
-                                ...styles.media,
-                                opacity: 1 // FORCE VISIBLE
-                            }}
+                            style={styles.media}
                             muted
                             playsInline
-                            preload="metadata"
-                            onLoadedData={handleLoad}
-                            onError={handleError}
+                            controls={false}
                         />
                         <div style={styles.playOverlay}>
                             <Play size={40} fill="rgba(255,255,255,0.8)" color="transparent" />
@@ -101,18 +77,13 @@ const MediaItem = ({ item, type, onClick, onEdit, onDelete }) => {
                     </>
                 ) : (
                     <img
-                        src={hasError ? 'https://placehold.co/600x400/1a1a1a/333/png?text=Image+Error' : getOptimizedUrl(item.url)}
+                        src={item.url}
                         alt={item.caption}
-                        loading="lazy"
                         style={{
                             ...styles.media,
                             objectPosition: item.position || '50% 20%',
                             transform: item.scale ? `scale(${item.scale})` : 'scale(1)',
-                            filter: 'contrast(1.05) saturate(1.1)',
-                            opacity: 1 // FORCE VISIBLE
                         }}
-                        onLoad={handleLoad}
-                        onError={handleError}
                     />
                 )}
 
